@@ -55,3 +55,14 @@ target("ui")
         end
         os.cd(oldir)
     end)
+    on_run(function (target)
+        local oldir = os.cd(os.scriptdir())
+        if os.host() == "windows" then
+            os.setenv("VITE_BASE_URL", "http://localhost:9000")
+            os.execv("pnpm.cmd",{"dev","--port","5173","--strictPort"})
+
+        else
+            -- os.execv("pnpm",{"dev","--open",browserPath})
+        end
+        os.cd(oldir)
+    end)

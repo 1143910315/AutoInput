@@ -2,7 +2,7 @@ add_rules("mode.debug", "mode.release", "mode.releasedbg")
 add_rules("plugin.vsxmake.autoupdate")
 if is_mode("debug") then
     set_runtimes("MDd")
-    add_requires("webui", {debug = true})
+    add_requires("webui", {debug = true,configs = {log = false}})
     add_requires("date", {debug = true})
 else
     set_runtimes("MD")
@@ -11,7 +11,7 @@ else
 end
 includes("ui/xmake.lua")
 
-target("WebUIXMakeTemplate")
+target("AutoInput")
     add_packages(
         "webui",
         "date"
@@ -23,6 +23,7 @@ target("WebUIXMakeTemplate")
     if is_mode("debug") then
         add_defines("_DEBUG")
         set_symbols("debug", "edit")
+        set_runargs("http://localhost:5173/")
     else
         if is_plat("windows") then
             add_ldflags("-subsystem:windows", {force = true})
