@@ -1,9 +1,9 @@
 <template>
   <el-dialog v-model="dialogVisible" title="录制新宏" width="80%" :before-close="handleClose">
     <div class="fl">
-      <el-text  size="large">开始/结束录制按键</el-text>
+      <el-text size="large">开始/结束录制按键</el-text>
       <div class="s1"></div>
-      <div class="radius"><el-text type="primary"  size="small">F1</el-text></div>
+      <div class="radius"><el-text type="primary" size="small">F1</el-text></div>
     </div>
     <span>This is a message</span>
     <template #footer>

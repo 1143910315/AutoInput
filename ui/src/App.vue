@@ -20,7 +20,7 @@
     </el-table>
     <div class="s2"></div>
     <el-button type="primary" @click="handleAdd">录制新宏</el-button>
-    <AddDialog v-model="addDialogVisible"/>
+    <AddDialog v-model="addDialogVisible" />
   </el-config-provider>
 </template>
 

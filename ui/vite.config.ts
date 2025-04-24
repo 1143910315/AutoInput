@@ -19,20 +19,27 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "/src/styles/element/index.scss" as *;`,
+      },
     },
   },
   build: {
     outDir: process.env.UI_BUILD_DIR || 'dist',
     rollupOptions: {
       plugins: [
-        visualizer({ open: false }) // 构建后自动打开分析结果
-      ]
+        visualizer({ open: false }), // 构建后自动打开分析结果
+      ],
     },
-  }
+  },
 })

@@ -1,0 +1,10 @@
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $font-size: (
+    'extra-large': 22px,
+    'large': 20px,
+    'medium': 18px,
+    'base': 16px,
+    'small': 15px,
+    'extra-small': 14px,
+  )
+);
