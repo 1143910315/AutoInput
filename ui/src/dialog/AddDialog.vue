@@ -56,7 +56,7 @@
 import { useWindowFocus } from '@vueuse/core'
 import { useFocus } from '@vueuse/core'
 import { ElMessageBox } from 'element-plus'
-import { ref, shallowRef, watch } from 'vue'
+import { ref, useTemplateRef, watch } from 'vue'
 
 import { recordHotkey } from '../storage/hotkey'
 import { useRecordStore } from '../stores/record'
@@ -90,7 +90,7 @@ const handleDelete = (index: number, row: macro) => {
 }
 const tableData: macro[] = []
 const windowFocus = useWindowFocus()
-const inputHotkey = shallowRef()
+const inputHotkey = useTemplateRef('inputHotkey')
 const { focused } = useFocus(inputHotkey)
 const recordStore = useRecordStore()
 
