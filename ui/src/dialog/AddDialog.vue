@@ -3,7 +3,9 @@
     <div class="fl">
       <el-text size="large">开始/结束录制按键</el-text>
       <div class="s1"></div>
-      <div class="radius"><el-text type="primary" size="small">F1</el-text></div>
+      <div class="radius" tabindex="0" ref="inputHotkey">
+        <el-text type="primary" size="small">{{ recordHotkey.toString() }}</el-text>
+      </div>
     </div>
     <el-table
       ref="singleTableRef"
@@ -34,17 +36,31 @@
 <style scoped>
 .radius {
   height: 20px;
-  width: 60px;
+  min-width: 60px;
   border: 2px solid var(--el-color-primary);
   border-radius: var(--el-border-radius-round);
   text-align: center;
   line-height: 20px;
   font-weight: bold;
+  padding: 0 10px;
+}
+.radius:hover {
+  background-color: #f0f7ff;
+}
+.radius:focus {
+  background-color: #e5f2ff;
+  outline: #e5f2ff solid 3px;
 }
 </style>
 <script lang="ts" setup>
+import { useWindowFocus } from '@vueuse/core'
+import { useFocus } from '@vueuse/core'
 import { ElMessageBox } from 'element-plus'
-import { ref } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
+
+import { recordHotkey } from '../storage/hotkey'
+import { useRecordStore } from '../stores/record'
+import { convertToKeyCombo } from '../utils/key'
 
 const dialogVisible = defineModel<boolean>()
 
@@ -73,4 +89,30 @@ const handleDelete = (index: number, row: macro) => {
   console.log(index, row)
 }
 const tableData: macro[] = []
+const windowFocus = useWindowFocus()
+const inputHotkey = shallowRef()
+const { focused } = useFocus(inputHotkey)
+const recordStore = useRecordStore()
+
+watch(windowFocus, (focused) => {
+  if (focused) {
+    console.log('window has been focused')
+  } else {
+    console.log('window has lost focus')
+  }
+})
+watch(focused, (focused) => {
+  if (focused) {
+    recordStore.keyboardEvents.clear()
+    void window.webui.call('beginRecord')
+  } else {
+    void window.webui.call('stopRecord')
+  }
+})
+watch(recordStore.keyboardEvents, () => {
+  const keyCombo = convertToKeyCombo(recordStore.getPressedKeys())
+  if (keyCombo[1] !== 0) {
+    recordHotkey.set(keyCombo)
+  }
+})
 </script>

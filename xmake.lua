@@ -4,17 +4,20 @@ if is_mode("debug") then
     set_runtimes("MDd")
     add_requires("webui", {debug = true,configs = {log = false}})
     add_requires("date", {debug = true})
+    add_requires("nlohmann_json", {debug = true})
 else
     set_runtimes("MD")
     add_requires("webui", {configs = {log = false}})
     add_requires("date")
+    add_requires("nlohmann_json")
 end
 includes("ui/xmake.lua")
 
 target("AutoInput")
     add_packages(
         "webui",
-        "date"
+        "date",
+        "nlohmann_json"
     )
     add_cxflags(
         "cl::/utf-8"
