@@ -67,6 +67,7 @@ const dialogVisible = defineModel<boolean>()
 const handleClose = (done: () => void) => {
   ElMessageBox.confirm('Are you sure to close this dialog?')
     .then(() => {
+      void window.webui.call('stopRecord')
       done()
     })
     .catch(() => {
@@ -78,7 +79,7 @@ interface macro {
   name: string
   address: string
 }
-const currentRow = ref()
+const currentRow = ref<macro | undefined>()
 const handleCurrentChange = (val: macro | undefined) => {
   currentRow.value = val
 }
@@ -93,26 +94,36 @@ const windowFocus = useWindowFocus()
 const inputHotkey = useTemplateRef('inputHotkey')
 const { focused } = useFocus(inputHotkey)
 const recordStore = useRecordStore()
+const setRecordHotkey = ref(false)
 
 watch(windowFocus, (focused) => {
-  if (focused) {
-    console.log('window has been focused')
-  } else {
-    console.log('window has lost focus')
+  if (!focused) {
+    setRecordHotkey.value = false
   }
 })
 watch(focused, (focused) => {
   if (focused) {
     recordStore.keyboardEvents.clear()
-    void window.webui.call('beginRecord')
+    setRecordHotkey.value = true
   } else {
-    void window.webui.call('stopRecord')
+    setRecordHotkey.value = false
   }
 })
 watch(recordStore.keyboardEvents, () => {
-  const keyCombo = convertToKeyCombo(recordStore.getPressedKeys())
-  if (keyCombo[1] !== 0) {
-    recordHotkey.set(keyCombo)
+  console.log('setRecordHotkey ' + setRecordHotkey.value)
+  if (setRecordHotkey.value) {
+    const keyCombo = convertToKeyCombo(recordStore.getPressedKeys())
+    if (keyCombo[1] !== 0) {
+      recordHotkey.set(keyCombo)
+      setRecordHotkey.value = false
+    }
+  }
+})
+watch(dialogVisible, (visible) => {
+  if (visible) {
+    recordStore.keyboardEvents.clear()
+    recordStore.mouseEvents.clear()
+    void window.webui.call('beginRecord')
   }
 })
 </script>

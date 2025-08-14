@@ -224,7 +224,6 @@ static void startServer(const std::string& url, int port = -1) {
                         pool.addDelayTask(std::chrono::microseconds(250), timeSend);
                         std::cout << "Connected." << std::endl;
                     } else if (e->event_type == WEBUI_EVENT_DISCONNECTED) {
-                        running = false;
                         std::cout << "Disconnected." << std::endl;
                     } else if (e->event_type == WEBUI_EVENT_MOUSE_CLICK) {
                         std::cout << "Click." << std::endl;

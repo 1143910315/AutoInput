@@ -82,6 +82,7 @@ const mouseRecordData = (event: CustomEvent<MouseRecordData[]>) => {
   })
 }
 const keyboardRecordData = (event: CustomEvent<KeyboardRecordData[]>) => {
+  console.log('new keyboard event received')
   event.detail.forEach((item) => {
     recordStore.keyboardEvents.add({
       code: item.code,
